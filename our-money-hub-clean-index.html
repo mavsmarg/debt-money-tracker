@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Our Money Hub 💜</title>
+<style>
+:root{--p:#7c3aed;--p2:#6d28d9;--bg:#f7f7fb;--card:#fff;--text:#202033;--muted:#6b7280;--line:#e5e7eb;--green:#059669;--red:#dc2626;--amber:#d97706;--blue:#2563eb}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}button,input,select,textarea{font:inherit}button{cursor:pointer}.wrap{max-width:1250px;margin:auto;padding:16px}.hero{background:linear-gradient(135deg,#7c3aed,#a855f7);color:white;border-radius:20px;padding:24px;margin-bottom:16px;box-shadow:0 10px 30px #7c3aed22}.hero h1{margin:0 0 5px;font-size:clamp(1.6rem,4vw,2.25rem)}.hero p{margin:0;opacity:.9}.tabs{display:flex;gap:8px;overflow:auto;padding:4px 0 12px;position:sticky;top:0;background:var(--bg);z-index:5}.tab{border:1px solid var(--line);background:#fff;color:#4b5563;border-radius:999px;padding:9px 14px;white-space:nowrap}.tab.active{background:var(--p);color:white;border-color:var(--p)}.section{display:none}.section.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px;box-shadow:0 3px 12px #1118270a}.title{margin:0 0 12px;color:var(--p2);font-size:1.2rem}.notice{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:12px;padding:10px 12px;margin-bottom:14px;color:#4c1d95;font-size:.9rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.field label{display:block;font-size:.82rem;font-weight:700;color:#4b5563;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:#fff}.field textarea{min-height:70px;resize:vertical}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.btn{border:0;border-radius:10px;padding:9px 13px;font-weight:700}.primary{background:var(--p);color:#fff}.primary:hover{background:var(--p2)}.secondary{background:#f3f4f6;color:#374151}.danger{background:#fee2e2;color:#991b1b}.small{padding:6px 9px;font-size:.82rem}.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.metric{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fff}.metric .label{font-size:.78rem;color:var(--muted)}.metric .value{font-size:1.35rem;font-weight:800;margin-top:2px}.metric.green{border-left:4px solid var(--green)}.metric.red{border-left:4px solid var(--red)}.metric.blue{border-left:4px solid var(--blue)}.metric.purple{border-left:4px solid var(--p)}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:12px}table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:.88rem}th{background:#f8fafc;color:#475569;font-size:.75rem;text-transform:uppercase;letter-spacing:.03em;position:sticky;top:0}tr:last-child td{border-bottom:0}.muted{color:var(--muted);font-size:.88rem}.empty{text-align:center;color:var(--muted);padding:25px}.status{display:inline-block;border-radius:999px;padding:4px 8px;font-size:.76rem;font-weight:800}.paid{background:#d1fae5;color:#065f46}.partial{background:#fef3c7;color:#92400e}.unpaid{background:#fee2e2;color:#991b1b}.overdue{background:#fecaca;color:#7f1d1d}.due{background:#dbeafe;color:#1e40af}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#f3f4f6;margin:2px;font-size:.78rem}.right{text-align:right}.hide{display:none!important}@media(max-width:600px){.wrap{padding:10px}.hero{padding:18px}.card{padding:13px}.grid{grid-template-columns:1fr}.tabs{margin:0 -10px;padding-left:10px;padding-right:10px}.buttons .btn{flex:1}.metric .value{font-size:1.15rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<h1>💜 Our Money Hub</h1>
+<p>A friendly place to track lending, cash received, savings, bills, and our monthly money flow.</p>
+</header>
+
+<nav class="tabs">
+<button class="tab active" data-tab="dashboard">🏠 Dashboard</button>
+<button class="tab" data-tab="lending">🤝 Lending</button>
+<button class="tab" data-tab="cash">💵 Cash Received</button>
+<button class="tab" data-tab="savings">🏦 Savings</button>
+<button class="tab" data-tab="bills">🧾 Bills</button>
+<button class="tab" data-tab="monthly">📅 Monthly</button>
+<button class="tab" data-tab="backup">💾 Backup</button>
+</nav>
+
+<section id="dashboard" class="section active">
+<div class="card"><h2 class="title">✨ Quick Overview</h2><div id="dashMetrics" class="summary"></div></div>
+<div class="card"><h2 class="title">🎯 Savings by Objective</h2><div id="dashSavings"></div></div>
+<div class="card"><h2 class="title">⏰ Upcoming / Overdue Payments</h2><div id="dashDue"></div></div>
+</section>
+
+<section id="lending" class="section">
+<div class="card">
+<h2 class="title">🤝 Add New Loan</h2>
+<div class="notice">Use the exact agreed first payment date. The tracker calculates the schedule from it. You can record partial payments and actual payment dates later.</div>
+<form id="loanForm"><div class="grid">
+<div class="field"><label>Client / Borrower *</label><input id="lClient" required placeholder="Name"></div>
+<div class="field"><label>Contact</label><input id="lContact" placeholder="Phone / Messenger"></div>
+<div class="field"><label>Principal (₱) *</label><input id="lPrincipal" type="number" min="0" step=".01" required></div>
+<div class="field"><label>Interest %</label><input id="lPct" type="number" min="0" step=".01" value="0"></div>
+<div class="field"><label>Fixed Interest (₱)</label><input id="lFixed" type="number" min="0" step=".01" value="0"></div>
+<div class="field"><label>Date Lent *</label><input id="lDate" type="date" required></div>
+<div class="field"><label>First Payment Due *</label><input id="lFirstDue" type="date" required></div>
+<div class="field"><label>Total Months *</label><input id="lMonths" type="number" min="1" step="1" value="1" required></div>
+<div class="field"><label>Payment Frequency *</label><select id="lFreq"><option value="monthly">Monthly</option><option value="biweekly">Every 2 Weeks</option><option value="weekly">Weekly</option><option value="one-time">One-Time</option></select></div>
+<div class="field"><label>Payment Amount</label><input id="lPayment" type="number" min="0" step=".01" placeholder="Blank = automatic"></div>
+<div class="field"><label>Notes</label><input id="lNote" placeholder="Agreement details"></div>
+</div><div class="buttons"><button class="btn primary">➕ Add Loan</button></div></form>
+</div>
+<div class="card"><h2 class="title">📋 Lending Tracker</h2><div id="loanSummary" class="summary"></div><div id="loanTable"></div></div>
+</section>
+
+<section id="cash" class="section">
+<div class="card"><h2 class="title">💵 Cash Received</h2>
+<div class="notice">This is money that has actually come in. Add as many entries as needed for both of you or money from selling something.</div>
+<form id="cashForm"><div class="grid">
+<div class="field"><label>Date *</label><input id="cDate" type="date" required></div>
+<div class="field"><label>Received By *</label><select id="cWho"><option>Me</option><option>BF</option><option>Both</option><option>Other</option></select></div>
+<div class="field"><label>Source *</label><input id="cSource" placeholder="Salary, selling item, loan payment..." required></div>
+<div class="field"><label>Amount (₱) *</label><input id="cAmount" type="number" min="0" step=".01" required></div>
+<div class="field"><label>Notes</label><input id="cNote" placeholder="Optional"></div>
+</div><div class="buttons"><button class="btn primary">➕ Add Cash Received</button></div></form>
+<div id="cashTable"></div></div>
+</section>
+
+<section id="savings" class="section">
+<div class="card"><h2 class="title">🏦 Savings Tracker</h2>
+<div class="notice"><b>Owner</b> = whose savings. <b>Where Saved</b> = where the money is kept. <b>Savings For</b> is free text, and identical objectives are automatically grouped.</div>
+<form id="saveForm"><div class="grid">
+<div class="field"><label>Date *</label><input id="sDate" type="date" required></div>
+<div class="field"><label>Owner *</label><select id="sWho"><option>Me</option><option>BF</option><option>Both</option><option>Other</option></select></div>
+<div class="field"><label>Where Saved *</label><input id="sWhere" placeholder="BPI, GCash, Maya..." required></div>
+<div class="field"><label>Savings For *</label><input id="sPurpose" placeholder="Date Fund, Future Business..." required></div>
+<div class="field"><label>Amount (₱) *</label><input id="sAmount" type="number" min="0" step=".01" required></div>
+<div class="field"><label>Notes</label><input id="sNote" placeholder="Optional"></div>
+</div><div class="buttons"><button class="btn primary">➕ Add Savings</button></div></form>
+<div id="saveSummary"></div><div id="saveTable"></div></div>
+</section>
+
+<section id="bills" class="section">
+<div class="card"><h2 class="title">🧾 Bill & Expense Tracker</h2>
+<form id="billForm"><div class="grid">
+<div class="field"><label>Date Paid *</label><input id="bDate" type="date" required></div>
+<div class="field"><label>Paid By *</label><select id="bWho"><option>Me</option><option>BF</option><option>Both</option><option>Other</option></select></div>
+<div class="field"><label>Bill / Expense *</label><input id="bSource" placeholder="Electricity, groceries, rent..." required></div>
+<div class="field"><label>Amount (₱) *</label><input id="bAmount" type="number" min="0" step=".01" required></div>
+<div class="field"><label>Category</label><input id="bCategory" placeholder="Utilities, food, transport..."></div>
+<div class="field"><label>Notes</label><input id="bNote" placeholder="Optional"></div>
+</div><div class="buttons"><button class="btn primary">➕ Add Bill / Expense</button></div></form>
+<div id="billTable"></div></div>
+</section>
+
+<section id="monthly" class="section">
+<div class="card"><h2 class="title">📅 Monthly Money Tracker</h2>
+<div class="buttons"><button id="prevMonth" class="btn secondary">← Previous</button><button id="nextMonth" class="btn secondary">Next →</button><button id="addMonth" class="btn primary">➕ Add Next Month</button></div>
+<h3 id="monthTitle" style="margin:14px 0 5px"></h3><div id="monthMetrics" class="summary"></div><div id="monthDetails"></div></div>
+</section>
+
+<section id="backup" class="section">
+<div class="card"><h2 class="title">💾 Backup & Restore</h2>
+<div class="notice">Your data is automatically saved in this browser. Use a backup file before changing devices or clearing browser data.</div>
+<div class="buttons"><button id="exportBtn" class="btn primary">⬇️ Export Backup</button><label class="btn secondary">⬆️ Import Backup<input id="importFile" type="file" accept=".json" class="hide"></label><button id="clearBtn" class="btn danger">🗑️ Clear All Data</button></div>
+</div></section>
+</div>
+
+<script>
+const KEY="our_money_hub_v1";
+let state={loans:[],cash:[],savings:[],bills:[],month:"2026-08"};
+
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const money=n=>"₱"+Number(n||0).toLocaleString("en-PH",{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const fmtDate=x=>x?new Date(x+"T00:00:00").toLocaleDateString("en-PH",{year:"numeric",month:"short",day:"numeric"}):"-";
+const daysBetween=(a,b)=>Math.ceil((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/86400000);
+function addDate(date,amount,unit){let d=new Date(date+"T00:00:00");if(unit==="monthly")d.setMonth(d.getMonth()+amount);else if(unit==="biweekly")d.setDate(d.getDate()+14*amount);else if(unit==="weekly")d.setDate(d.getDate()+7*amount);return d.toISOString().slice(0,10)}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&typeof x==="object")state={...state,...x}}catch(e){}if(!Array.isArray(state.loans))state.loans=[];if(!Array.isArray(state.cash))state.cash=[];if(!Array.isArray(state.savings))state.savings=[];if(!Array.isArray(state.bills))state.bills=[]}
+function switchTab(id){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));window.scrollTo({top:0,behavior:"smooth"})}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+
+function loanTotal(l){return Number(l.principal||0)+Number(l.interest||0)}
+function loanPaid(l){return (l.payments||[]).reduce((s,p)=>s+Number(p.amount||0),0)}
+function schedule(l){let total=loanTotal(l), periods=l.frequency==="one-time"?1:Number(l.months||1), payment=Number(l.payment)||total/periods, arr=[];for(let i=0;i<periods;i++){let due=i===0?l.firstDue:addDate(l.firstDue,i,l.frequency);let amt=i===periods-1?Math.max(0,total-payment*(periods-1)):payment;arr.push({i,due,amount:amt})}return arr}
+function loanStatus(l){let total=loanTotal(l),paid=loanPaid(l),remain=Math.max(0,total-paid);if(remain<=.009)return ["Paid","paid"];let sched=schedule(l),next=sched.find(x=>{let paidBefore=(l.payments||[]).filter(p=>p.due===x.due).reduce((s,p)=>s+Number(p.amount||0),0);return paidBefore<x.amount});if(!next)return ["Partial","partial"];let d=daysBetween(today(),next.due);if(d<0)return ["Overdue","overdue"];if(d<=7)return ["Due Soon","due"];return ["Unpaid","unpaid"]}
+
+function renderDashboard(){
+ const cash=state.cash.reduce((s,x)=>s+Number(x.amount||0),0), savings=state.savings.reduce((s,x)=>s+Number(x.amount||0),0), bills=state.bills.reduce((s,x)=>s+Number(x.amount||0),0), lent=state.loans.reduce((s,l)=>s+Math.max(0,l.principal-loanPaid(l)),0);
+ const collected=state.loans.reduce((s,l)=>s+loanPaid(l),0), expected=state.loans.reduce((s,l)=>s+loanTotal(l),0);
+ $("dashMetrics").innerHTML=`<div class="metric blue"><div class="label">💵 Cash Received</div><div class="value">${money(cash)}</div></div><div class="metric purple"><div class="label">🤝 Still Lent / Owed</div><div class="value">${money(lent)}</div></div><div class="metric green"><div class="label">🏦 Total Savings</div><div class="value">${money(savings)}</div></div><div class="metric red"><div class="label">🧾 Bills / Expenses</div><div class="value">${money(bills)}</div></div><div class="metric blue"><div class="label">💳 Loan Payments Collected</div><div class="value">${money(collected)}</div></div><div class="metric purple"><div class="label">💰 Expected Loan Return</div><div class="value">${money(expected)}</div></div><div class="metric green"><div class="label">💚 Available Cash</div><div class="value">${money(cash-savings-bills-lent)}</div></div>`;
+ const g={};state.savings.forEach(x=>{let k=(x.purpose||"Unspecified").trim()||"Unspecified";g[k]=(g[k]||0)+Number(x.amount||0)});$("dashSavings").innerHTML=Object.keys(g).length?Object.keys(g).sort().map(k=>`<span class="pill">🎯 ${esc(k)}: <b>${money(g[k])}</b></span>`).join(""):'<div class="empty">No savings yet.</div>';
+ let due=[];state.loans.forEach(l=>schedule(l).forEach(s=>{let paid=(l.payments||[]).filter(p=>p.due===s.due).reduce((a,p)=>a+Number(p.amount||0),0);if(paid<s.amount)due.push({l,s,paid})}));due.sort((a,b)=>a.s.due.localeCompare(b.s.due));$("dashDue").innerHTML=due.length?due.slice(0,8).map(x=>`<div class="pill">👤 ${esc(x.l.client)} · ${fmtDate(x.s.due)} · ${money(Math.max(0,x.s.amount-x.paid))}</div>`).join(""):'<div class="empty">🎉 No unpaid scheduled payments.</div>';
+}
+
+function renderLoans(){
+ let totalP=state.loans.reduce((s,l)=>s+Number(l.principal||0),0), totalI=state.loans.reduce((s,l)=>s+Number(l.interest||0),0), collected=state.loans.reduce((s,l)=>s+loanPaid(l),0), outstanding=state.loans.reduce((s,l)=>s+Math.max(0,loanTotal(l)-loanPaid(l)),0);
+ $("loanSummary").innerHTML=`<div class="metric purple"><div class="label">Principal Lent</div><div class="value">${money(totalP)}</div></div><div class="metric green"><div class="label">Interest Expected</div><div class="value">${money(totalI)}</div></div><div class="metric blue"><div class="label">Collected</div><div class="value">${money(collected)}</div></div><div class="metric red"><div class="label">Still Owed</div><div class="value">${money(outstanding)}</div></div>`;
+ if(!state.loans.length){$("loanTable").innerHTML='<div class="empty">🤝 No loans yet. Add your first loan above.</div>';return}
+ let h='<div class="table-wrap"><table><thead><tr><th>Client</th><th>Principal</th><th>Interest</th><th>Total Return</th><th>Date Lent</th><th>First Due</th><th>Schedule</th><th>Paid</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+ state.loans.forEach(l=>{let st=loanStatus(l),paid=loanPaid(l),total=loanTotal(l);h+=`<tr><td><b>${esc(l.client)}</b><br><span class="muted">${esc(l.contact||"")}</span></td><td>${money(l.principal)}</td><td>${money(l.interest)}</td><td>${money(total)}</td><td>${fmtDate(l.dateLent)}</td><td>${fmtDate(l.firstDue)}</td><td>${l.frequency}, ${l.months} mo.<br>${money(l.payment)} / payment</td><td>${money(paid)}</td><td><b>${money(Math.max(0,total-paid))}</b></td><td><span class="status ${st[1]}">${st[0]}</span></td><td><button class="btn primary small" onclick="openLoan('${l.id}')">View / Pay</button> <button class="btn danger small" onclick="deleteLoan('${l.id}')">🗑️</button></td></tr>`});$("loanTable").innerHTML=h+"</tbody></table></div>";
+}
+function openLoan(id){
+ const l=state.loans.find(x=>x.id===id);if(!l)return;
+ let h=`<div class="card"><h2 class="title">💳 ${esc(l.client)} — Payment Schedule</h2><div class="notice">Record the actual payment date and amount. Partial payments are okay.</div><div class="table-wrap"><table><thead><tr><th>Due Date</th><th>Scheduled</th><th>Paid</th><th>Remaining</th><th>Status</th><th>Action</th></tr></thead><tbody>`;
+ schedule(l).forEach(s=>{let paid=(l.payments||[]).filter(p=>p.due===s.due).reduce((a,p)=>a+Number(p.amount||0),0),rem=Math.max(0,s.amount-paid),st=rem<=.009?["Paid","paid"]:(daysBetween(today(),s.due)<0?["Overdue","overdue"]:["Unpaid","unpaid"]);h+=`<tr><td>${fmtDate(s.due)}</td><td>${money(s.amount)}</td><td>${money(paid)}</td><td>${money(rem)}</td><td><span class="status ${st[1]}">${st[0]}</span></td><td>${rem>.009?`<button class="btn primary small" onclick="recordPayment('${l.id}','${s.due}',${rem})">Record Payment</button>`:"—"}</td></tr>`});h+='</tbody></table></div><div id="paymentBox" style="margin-top:12px"></div></div>';
+ const temp=document.createElement("div");temp.innerHTML=h;const old=document.querySelector("#loanTable + .card");if(old)old.remove();document.querySelector("#lending").appendChild(temp.firstElementChild);
+}
+function recordPayment(id,due,max){const l=state.loans.find(x=>x.id===id);let date=prompt("Actual payment date (YYYY-MM-DD):",today());if(!date)return;let amount=Number(prompt("Payment amount (max scheduled remaining "+money(max)+"):",max));if(!amount||amount<=0)return alert("Enter a valid amount.");l.payments=l.payments||[];l.payments.push({date,due,amount});state.cash.push({id:Date.now().toString(),date,who:"Client Payment",source:"Loan payment - "+l.client,amount,note:"Applied to due "+due});save();render();openLoan(id)}
+function deleteLoan(id){if(confirm("Delete this loan and its payment history?")){state.loans=state.loans.filter(x=>x.id!==id);save();render()}}
+$("loanForm").onsubmit=e=>{e.preventDefault();let principal=+$("lPrincipal").value||0,months=Math.max(1,+$("lMonths").value||1),pct=+$("lPct").value||0,fixed=+$("lFixed").value||0;if(principal<=0)return alert("Enter a valid principal.");let interest=fixed>0?fixed:principal*pct/100,total=principal+interest,freq=$("lFreq").value,periods=freq==="one-time"?1:months,payment=+$("lPayment").value||total/periods;state.loans.push({id:Date.now().toString(),client:$("lClient").value.trim(),contact:$("lContact").value.trim(),principal,interest,interestPct:pct,fixedInterest:fixed,dateLent:$("lDate").value,firstDue:$("lFirstDue").value,months,frequency:freq,payment,note:$("lNote").value.trim(),payments:[]});save();render();e.target.reset();$("lDate").value=today();$("lFirstDue").value=today();alert("Loan added successfully! 💜")};
+
+function renderCash(){let total=state.cash.reduce((s,x)=>s+Number(x.amount||0),0);if(!state.cash.length){$("cashTable").innerHTML='<div class="empty">No cash received entries yet.</div>';return}let h=`<p class="muted">Total Cash Received: <b>${money(total)}</b></p><div class="table-wrap"><table><thead><tr><th>Date</th><th>Received By</th><th>Source</th><th>Amount</th><th>Notes</th><th>Action</th></tr></thead><tbody>`;state.cash.slice().sort((a,b)=>b.date.localeCompare(a.date)).forEach(x=>h+=`<tr><td>${fmtDate(x.date)}</td><td>${esc(x.who)}</td><td>${esc(x.source)}</td><td><b>${money(x.amount)}</b></td><td>${esc(x.note||"-")}</td><td><button class="btn danger small" onclick="deleteCash('${x.id}')">🗑️</button></td></tr>`);$("cashTable").innerHTML=h+"</tbody></table></div>"}
+function deleteCash(id){if(confirm("Delete this cash entry?")){state.cash=state.cash.filter(x=>x.id!==id);save();render()}}
+$("cashForm").onsubmit=e=>{e.preventDefault();state.cash.push({id:Date.now().toString(),date:$("cDate").value,who:$("cWho").value,source:$("cSource").value.trim(),amount:+$("cAmount").value||0,note:$("cNote").value.trim()});save();render();e.target.reset();$("cDate").value=today()};
+
+function renderSavings(){let total=state.savings.reduce((s,x)=>s+Number(x.amount||0),0),g={};state.savings.forEach(x=>{let k=x.purpose.trim()||"Unspecified";g[k]=(g[k]||0)+Number(x.amount||0)});$("saveSummary").innerHTML=`<div class="summary" style="margin-top:12px"><div class="metric green"><div class="label">Total Savings</div><div class="value">${money(total)}</div></div>`+Object.keys(g).sort().map(k=>`<div class="metric"><div class="label">🎯 ${esc(k)}</div><div class="value">${money(g[k])}</div></div>`).join("")+"</div>";if(!state.savings.length){$("saveTable").innerHTML='<div class="empty">No savings entries yet.</div>';return}let h='<div class="table-wrap"><table><thead><tr><th>Date</th><th>Owner</th><th>Where Saved</th><th>Savings For</th><th>Amount</th><th>Notes</th><th>Action</th></tr></thead><tbody>';state.savings.slice().sort((a,b)=>b.date.localeCompare(a.date)).forEach(x=>h+=`<tr><td>${fmtDate(x.date)}</td><td>${esc(x.who)}</td><td>${esc(x.where)}</td><td><b>${esc(x.purpose)}</b></td><td>${money(x.amount)}</td><td>${esc(x.note||"-")}</td><td><button class="btn danger small" onclick="deleteSaving('${x.id}')">🗑️</button></td></tr>`);$("saveTable").innerHTML=h+"</tbody></table></div>"}
+function deleteSaving(id){if(confirm("Delete this savings entry?")){state.savings=state.savings.filter(x=>x.id!==id);save();render()}}
+$("saveForm").onsubmit=e=>{e.preventDefault();let amount=+$("sAmount").value||0;if(amount<=0)return alert("Enter a valid amount.");state.savings.push({id:Date.now().toString(),date:$("sDate").value,who:$("sWho").value,where:$("sWhere").value.trim(),purpose:$("sPurpose").value.trim(),amount,note:$("sNote").value.trim()});save();render();e.target.reset();$("sDate").value=today()};
+
+function renderBills(){let total=state.bills.reduce((s,x)=>s+Number(x.amount||0),0);$("billTable").innerHTML=state.bills.length?`<p class="muted">Total Bills / Expenses: <b>${money(total)}</b></p><div class="table-wrap"><table><thead><tr><th>Date</th><th>Paid By</th><th>Bill / Expense</th><th>Category</th><th>Amount</th><th>Notes</th><th>Action</th></tr></thead><tbody>`+state.bills.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<tr><td>${fmtDate(x.date)}</td><td>${esc(x.who)}</td><td>${esc(x.source)}</td><td>${esc(x.category||"-")}</td><td><b>${money(x.amount)}</b></td><td>${esc(x.note||"-")}</td><td><button class="btn danger small" onclick="deleteBill('${x.id}')">🗑️</button></td></tr>`).join("")+"</tbody></table></div>":'<div class="empty">No bill/expense entries yet.</div>'}
+function deleteBill(id){if(confirm("Delete this bill/expense?")){state.bills=state.bills.filter(x=>x.id!==id);save();render()}}
+$("billForm").onsubmit=e=>{e.preventDefault();let amount=+$("bAmount").value||0;if(amount<=0)return alert("Enter a valid amount.");state.bills.push({id:Date.now().toString(),date:$("bDate").value,who:$("bWho").value,source:$("bSource").value.trim(),category:$("bCategory").value.trim(),amount,note:$("bNote").value.trim()});save();render();e.target.reset();$("bDate").value=today()};
+
+function renderMonth(){
+ let [y,m]=state.month.split("-").map(Number),start=state.month+"-01",next=new Date(y,m,1);next.setMonth(next.getMonth()+1);let end=new Date(next-1).toISOString().slice(0,10);
+ const cash=state.cash.filter(x=>x.date>=start&&x.date<=end).reduce((s,x)=>s+Number(x.amount||0),0),sav=state.savings.filter(x=>x.date>=start&&x.date<=end).reduce((s,x)=>s+Number(x.amount||0),0),bill=state.bills.filter(x=>x.date>=start&&x.date<=end).reduce((s,x)=>s+Number(x.amount||0),0);
+ $("monthTitle").textContent=new Date(y,m,1).toLocaleDateString("en-PH",{month:"long",year:"numeric"});
+ $("monthMetrics").innerHTML=`<div class="metric blue"><div class="label">Cash Received</div><div class="value">${money(cash)}</div></div><div class="metric green"><div class="label">Savings Added</div><div class="value">${money(sav)}</div></div><div class="metric red"><div class="label">Bills / Expenses</div><div class="value">${money(bill)}</div></div>`;
+ let rows=[];state.loans.forEach(l=>schedule(l).forEach(s=>{if(s.due>=start&&s.due<=end){let paid=(l.payments||[]).filter(p=>p.due===s.due).reduce((a,p)=>a+Number(p.amount||0),0);rows.push({l,s,paid})}}));
+ $("monthDetails").innerHTML=rows.length?'<div class="table-wrap"><table><thead><tr><th>Client</th><th>Due Date</th><th>Scheduled</th><th>Paid</th><th>Remaining</th><th>Status</th></tr></thead><tbody>'+rows.map(x=>{let rem=Math.max(0,x.s.amount-x.paid),cl=rem<=.009?"paid":daysBetween(today(),x.s.due)<0?"overdue":x.paid>0?"partial":"unpaid";return`<tr><td>${esc(x.l.client)}</td><td>${fmtDate(x.s.due)}</td><td>${money(x.s.amount)}</td><td>${money(x.paid)}</td><td>${money(rem)}</td><td><span class="status ${cl}">${cl}</span></td></tr>`}).join("")+'</tbody></table></div>':'<div class="empty">No loan installments scheduled for this month.</div>';
+}
+$("prevMonth").onclick=()=>{let d=new Date(state.month+"-01T00:00:00");d.setMonth(d.getMonth()-1);state.month=d.toISOString().slice(0,7);save();render()};
+$("nextMonth").onclick=()=>{let d=new Date(state.month+"-01T00:00:00");d.setMonth(d.getMonth()+1);state.month=d.toISOString().slice(0,7);save();render()};
+$("addMonth").onclick=()=>{let d=new Date(state.month+"-01T00:00:00");d.setMonth(d.getMonth()+1);state.month=d.toISOString().slice(0,7);save();render();alert("Next month added/opened: "+d.toLocaleDateString("en-PH",{month:"long",year:"numeric"}))};
+
+$("exportBtn").onclick=()=>{let blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="our-money-hub-backup-"+today()+".json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)};
+$("importFile").onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x||!Array.isArray(x.loans)||!Array.isArray(x.cash)||!Array.isArray(x.savings)||!Array.isArray(x.bills))throw Error();state=x;save();render();alert("Backup restored successfully!")}catch(err){alert("That backup file is not valid for this tracker.")}};r.readAsText(f)};
+$("clearBtn").onclick=()=>{if(confirm("Clear ALL tracker data? This cannot be undone unless you have an exported backup.")){state={loans:[],cash:[],savings:[],bills:[],month:"2026-08"};save();render()}};
+
+function setDates(){["lDate","lFirstDue","cDate","sDate","bDate"].forEach(id=>$(id).value=today())}
+function render(){renderDashboard();renderLoans();renderCash();renderSavings();renderBills();renderMonth()}
+load();setDates();render();
+</script>
+</body>
+</html>
